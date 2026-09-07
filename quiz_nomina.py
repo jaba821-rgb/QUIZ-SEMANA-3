@@ -1,16 +1,3 @@
-# quiz_nomina.py
-# Quiz Semana 3 - Fundamentos de programacion (Pilares de POO)
-# Tema: nomina de una empresa leida desde un EXCEL. Aplica los 3 pilares:
-# Encapsulamiento, Herencia y Polimorfismo (lo visto en la Semana 3).
-#
-# NUEVO en este quiz:
-#   * Los datos vienen de un Excel (empleados.xlsx) con VARIAS columnas.
-#   * La LECTURA del Excel YA ESTA LISTA y es robusta (no la tienes que tocar).
-#   * Tu trabajo: completar los "# TODO" de las CLASES y crear TU PROPIA funcion.
-#
-# Antes de ejecutar, instala las librerias (una sola vez):
-#     pip install -r requirements.txt
-# Para ejecutar:  python quiz_nomina.py
 
 import pandas as pd
 
@@ -23,12 +10,12 @@ class EmpleadoBase:
         self.nombre = nombre
         self.ciudad = ciudad
         self.salario_base = salario_base
-        pass
+        
 
     # GETTER: leer el salario de forma segura
     @property
     def salario_base(self):
-        # TODO: devuelve el atributo privado self._salario_base
+        
         return self._salario_base
 
     # SETTER: valida ANTES de guardar
@@ -43,29 +30,26 @@ class EmpleadoBase:
         raise NotImplementedError("Cada tipo de empleado calcula su pago.")
 
     def obtener_informacion(self):
-        # TODO: devuelve un texto como:  "Ana | EmpleadoPlanta | Medellin | base $3000000"
-        #       Pista: self.nombre, type(self).__name__, self.ciudad, self.salario_base
+        
         return f"{self.nombre} | {type(self).__name__} | {self.ciudad} | base ${self.salario_base}"
 
 
 # 2) CLASES HIJAS (HERENCIA)
 class EmpleadoPlanta(EmpleadoBase):
     def calcular_pago(self):
-        # TODO (POLIMORFISMO): el empleado de planta recibe su salario + 30% de prestaciones
+        
         return self.salario_base + (self.salario_base * 0.3)
 
 
 class EmpleadoContratista(EmpleadoBase):
     def calcular_pago(self):
-        # TODO (POLIMORFISMO): el contratista recibe solo su salario base (sin prestaciones)
+        
         return self.salario_base
 
 
 # 3) Crear el objeto correcto segun el TIPO
 def crear_empleado(nombre, tipo, salario_base, ciudad):
-    # TODO: si tipo == "PLANTA"       -> return EmpleadoPlanta(nombre, salario_base, ciudad)
-    #       si tipo == "CONTRATISTA"  -> return EmpleadoContratista(nombre, salario_base, ciudad)
-    #       si no                     -> raise ValueError(f"tipo desconocido '{tipo}'")
+    
     if tipo == "PLANTA":
         return EmpleadoPlanta(nombre, salario_base, ciudad)
     elif tipo == "CONTRATISTA":
@@ -129,7 +113,7 @@ def leer_empleados_excel(nombre_archivo):
 #    Documentala con un docstring y luego llamala dentro de ejecutar_quiz().
 # =====================================================================
 def salario_promedio(empleados):
-    # TODO: escribe aqui tu propia logica
+    """Calcula el salario promedio de una lista de empleados."""
     total = sum(empleado.salario_base for empleado in empleados)
     return total / len(empleados) if empleados else 0
 
@@ -143,7 +127,7 @@ def ejecutar_quiz():
         # POLIMORFISMO: la misma llamada, distinto resultado segun el tipo
         print(empleado.obtener_informacion(), "-> pago:", empleado.calcular_pago())
 
-    # TODO (reto): descomenta y adapta la siguiente linea para usar TU funcion
+    
     print("\nSalario promedio:", salario_promedio(empleados))
 
 
