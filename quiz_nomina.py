@@ -22,21 +22,21 @@ class EmpleadoBase:
     def __init__(self, nombre, salario_base, ciudad):
         self.nombre = nombre
         self.ciudad = ciudad
-        # TODO: guarda el salario usando el SETTER -> self.salario_base = salario_base
+        self.salario_base = salario_base
         pass
 
     # GETTER: leer el salario de forma segura
     @property
     def salario_base(self):
         # TODO: devuelve el atributo privado self._salario_base
-        return 0
+        return self._salario_base
 
     # SETTER: valida ANTES de guardar
     @salario_base.setter
     def salario_base(self, nuevo_salario):
-        # TODO: si int(nuevo_salario) < 0  ->  raise ValueError("El salario no puede ser negativo.")
-        #       si es valido, guardalo:  self._salario_base = int(nuevo_salario)
-        pass
+        if int(nuevo_salario) < 0:
+            raise ValueError(f"Salario base no puede ser negativo: {nuevo_salario}")
+        self._salario_base = int(nuevo_salario)
 
     # Metodo comun que CADA HIJA sobreescribe (POLIMORFISMO)
     def calcular_pago(self):
@@ -45,20 +45,20 @@ class EmpleadoBase:
     def obtener_informacion(self):
         # TODO: devuelve un texto como:  "Ana | EmpleadoPlanta | Medellin | base $3000000"
         #       Pista: self.nombre, type(self).__name__, self.ciudad, self.salario_base
-        return ""
+        return f"{self.nombre} | {type(self).__name__} | {self.ciudad} | base ${self.salario_base}"
 
 
 # 2) CLASES HIJAS (HERENCIA)
 class EmpleadoPlanta(EmpleadoBase):
     def calcular_pago(self):
         # TODO (POLIMORFISMO): el empleado de planta recibe su salario + 30% de prestaciones
-        return 0
+        return self.salario_base + (self.salario_base * 0.3)
 
 
 class EmpleadoContratista(EmpleadoBase):
     def calcular_pago(self):
         # TODO (POLIMORFISMO): el contratista recibe solo su salario base (sin prestaciones)
-        return 0
+        return self.salario_base
 
 
 # 3) Crear el objeto correcto segun el TIPO
@@ -66,7 +66,12 @@ def crear_empleado(nombre, tipo, salario_base, ciudad):
     # TODO: si tipo == "PLANTA"       -> return EmpleadoPlanta(nombre, salario_base, ciudad)
     #       si tipo == "CONTRATISTA"  -> return EmpleadoContratista(nombre, salario_base, ciudad)
     #       si no                     -> raise ValueError(f"tipo desconocido '{tipo}'")
-    pass
+    if tipo == "PLANTA":
+        return EmpleadoPlanta(nombre, salario_base, ciudad)
+    elif tipo == "CONTRATISTA":
+        return EmpleadoContratista(nombre, salario_base, ciudad)
+    else:
+        raise ValueError(f"tipo desconocido '{tipo}'")  
 
 
 # =====================================================================
@@ -125,7 +130,8 @@ def leer_empleados_excel(nombre_archivo):
 # =====================================================================
 def salario_promedio(empleados):
     # TODO: escribe aqui tu propia logica
-    pass
+    total = sum(empleado.salario_base for empleado in empleados)
+    return total / len(empleados) if empleados else 0
 
 
 # 6) Funcion principal
